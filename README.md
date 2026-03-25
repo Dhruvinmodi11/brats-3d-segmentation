@@ -7,7 +7,7 @@
 - **Data strategy:** patch-based training on mixed BraTS 2020 + 2023 preprocessed `.npz` files
 - **Inference strategy:** fold checkpoint ensemble + optional TTA + sliding-window stitching
 
-## Why this project is interesting
+## Baseline
 
 - Trains on **consumer-GPU-friendly 3D patches** while keeping full-volume inference available.
 - Uses **Dice + weighted CE + optional boundary loss** for class imbalance and sharper borders.
@@ -61,21 +61,7 @@ flowchart LR
     J --> K[outputs/eval_report.html]
 ```
 
-### Model + evaluation visual map
 
-```mermaid
-flowchart TD
-    M1[4-channel MRI patch] --> M2[UNet3DAttnV2 encoder]
-    M2 --> M3[Attention-gated decoder]
-    M3 --> M4[Main logits 4 classes]
-    M3 --> M5[Deep supervision heads]
-    M4 --> M6[argmax segmentation]
-    M6 --> M7[Dice WT/TC/ET + HD95]
-    M7 --> M8[Per-patch table]
-    M7 --> M9[Per-case aggregation]
-    M8 --> M10[outputs/eval_report.html]
-    M9 --> M10
-```
 
 ### Project architecture (quick view)
 
@@ -106,6 +92,8 @@ flowchart LR
     T --> O1
     O1 --> I
 ```
+
+
 
 ## Repository layout
 
@@ -175,6 +163,7 @@ Per-case sample from the report:
 | BraTS-GLI-00018-000 | 10        | 0.8258       | 0.9722  | 0.8865  | 0.7799  |
 | BraTS-GLI-00032-001 | 12        | 0.8018       | 0.8985  | 0.8947  | 0.8972  |
 
+
 ### Actual segmentation outputs (GT vs prediction overlays)
 
 Each tile is the same layout: **T1ce** | **Ground truth** | **Prediction** (class colors: NCR/NET red, edema green, ET blue).
@@ -183,14 +172,15 @@ Each tile is the same layout: **T1ce** | **Ground truth** | **Prediction** (clas
 
 ![Segmentation comparison grid](outputs/seg_comparison_grid.png)
 
-| Panel | Patch source |
-| ----- | -------------- |
-| Top-left | `BraTS-GLI-00006-000` patch `0000` |
-| Top-right | `BraTS-GLI-00006-000` patch `0001` |
-| Bottom-left | `BraTS-GLI-00018-000` patch `0006` |
+| Panel        | Patch source                       |
+| ------------ | ---------------------------------- |
+| Top-left     | `BraTS-GLI-00006-000` patch `0000` |
+| Top-right    | `BraTS-GLI-00006-000` patch `0001` |
+| Bottom-left  | `BraTS-GLI-00018-000` patch `0006` |
 | Bottom-right | `BraTS-GLI-00019-000` patch `0009` |
 
-Full-size panels (same renders as in the grid): [`seg_example_00006_0000.png`](outputs/seg_example_00006_0000.png) · [`seg_example_00006_0001.png`](outputs/seg_example_00006_0001.png) · [`seg_example_00018_0006.png`](outputs/seg_example_00018_0006.png) · [`seg_example_00019_0009.png`](outputs/seg_example_00019_0009.png)
+
+Full-size panels (same renders as in the grid): [seg_example_00006_0000.png](outputs/seg_example_00006_0000.png) · [seg_example_00006_0001.png](outputs/seg_example_00006_0001.png) · [seg_example_00018_0006.png](outputs/seg_example_00018_0006.png) · [seg_example_00019_0009.png](outputs/seg_example_00019_0009.png)
 
 Regenerate the grid after updating overlays: `python scripts/make_seg_comparison_grid.py`
 
@@ -198,29 +188,4 @@ Output artifacts included in this repo:
 
 - `outputs/eval_report.html` (full metric tables + distribution plot)
 - `outputs/my_result.npz` (example predicted mask artifact)
-
-## What a new user should look at first
-
-1. Run a single patch inference using `inference/predict.py`.
-2. Run evaluation using `inference/evaluate.py --report --extended`.
-3. Open `outputs/eval_report.html` and inspect:
-  - `Dice_mean_fg` for overall segmentation quality,
-  - WT/TC/ET to understand region-level strengths/weaknesses,
-  - HD95 for boundary quality and outlier failures.
-
-## Important operational notes
-
-- Keep train/inference architecture width aligned:
-  - training uses `MODEL_BASE` (run config),
-  - inference uses `V2_CONFIG["base"]` in `inference/predict.py`.
-- `fold_N_best.pt` is the primary checkpoint for ensemble inference.
-- Sliding-window inference is recommended for full MRI volumes; patch inference is mainly for fast checks.
-- If you change path assumptions (e.g., from `E:\data`), update scripts/configs consistently.
-
-## What’s next (roadmap highlights)
-
-- Finalize a single production-grade model profile.
-- Improve report exports (CSV/JSON and richer metric tables).
-- Add stricter case-level CV option when needed.
-- Package inference behind an API after model freeze.
 
