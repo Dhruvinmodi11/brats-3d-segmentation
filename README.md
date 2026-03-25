@@ -77,6 +77,36 @@ flowchart TD
     M9 --> M10
 ```
 
+### Project architecture (quick view)
+
+```mermaid
+flowchart LR
+    subgraph T[Training Lane]
+        T1[training/core/model.py]
+        T2[training/engine/train_engine.py]
+        T3[training/runs/v2_5fold.py]
+        T1 --> T2 --> T3
+    end
+
+    subgraph I[Inference Lane]
+        I1[inference/predict.py]
+        I2[inference/sliding_window.py]
+        I3[inference/evaluate.py]
+        I1 --> I3
+        I2 --> I3
+    end
+
+    subgraph O[Outputs Lane]
+        O1[models/v2/fold_N_best.pt]
+        O2[outputs/my_result.npz]
+        O3[outputs/eval_report.html]
+        O1 --> O2 --> O3
+    end
+
+    T --> O1
+    O1 --> I
+```
+
 ## Repository layout
 
 ```text
