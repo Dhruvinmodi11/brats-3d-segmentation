@@ -175,21 +175,24 @@ Per-case sample from the report:
 | BraTS-GLI-00018-000 | 10        | 0.8258       | 0.9722  | 0.8865  | 0.7799  |
 | BraTS-GLI-00032-001 | 12        | 0.8018       | 0.8985  | 0.8947  | 0.8972  |
 
-### Actual segmentation outputs (GT vs Prediction overlays)
+### Actual segmentation outputs (GT vs prediction overlays)
 
-Each panel below shows `T1ce`, `Ground truth`, and `Prediction` for a real patch exported from this project.
+Each tile is the same layout: **T1ce** | **Ground truth** | **Prediction** (class colors: NCR/NET red, edema green, ET blue).
 
-**Example A - BraTS-GLI-00006-000 patch 0000**
+**2×2 overview (four validation patches)**
 
-![Segmentation Example A](outputs/seg_example_00006_0000.png)
+![Segmentation comparison grid](outputs/seg_comparison_grid.png)
 
-**Example B - BraTS-GLI-00006-000 patch 0001**
+| Panel | Patch source |
+| ----- | -------------- |
+| Top-left | `BraTS-GLI-00006-000` patch `0000` |
+| Top-right | `BraTS-GLI-00006-000` patch `0001` |
+| Bottom-left | `BraTS-GLI-00018-000` patch `0006` |
+| Bottom-right | `BraTS-GLI-00019-000` patch `0009` |
 
-![Segmentation Example B](outputs/seg_example_00006_0001.png)
+Full-size panels (same renders as in the grid): [`seg_example_00006_0000.png`](outputs/seg_example_00006_0000.png) · [`seg_example_00006_0001.png`](outputs/seg_example_00006_0001.png) · [`seg_example_00018_0006.png`](outputs/seg_example_00018_0006.png) · [`seg_example_00019_0009.png`](outputs/seg_example_00019_0009.png)
 
-**Example C - BraTS-GLI-00018-000 patch 0006**
-
-![Segmentation Example C](outputs/seg_example_00018_0006.png)
+Regenerate the grid after updating overlays: `python scripts/make_seg_comparison_grid.py`
 
 Output artifacts included in this repo:
 
