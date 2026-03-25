@@ -15,9 +15,12 @@ from typing import Callable, Optional
 
 import numpy as np
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "training"))
+ROOT_DIR = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT_DIR))
+sys.path.insert(0, str(ROOT_DIR / "training"))
+from project_config import OUTPUTS_DIR as PROJECT_OUTPUTS_DIR
 
-OUTPUTS_DIR = Path(r"E:\data\outputs")
+OUTPUTS_DIR = PROJECT_OUTPUTS_DIR
 PATCH_SIZE = 96
 DEFAULT_STRIDE = 32  # 67% overlap — better boundary stitching
 

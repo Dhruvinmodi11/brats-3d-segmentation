@@ -14,7 +14,9 @@ import sys
 from pathlib import Path
 from datetime import datetime
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+ROOT_DIR = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT_DIR))
+sys.path.insert(0, str(ROOT_DIR / "training"))
 
 import numpy as np
 import torch
@@ -28,8 +30,9 @@ from core.helpers import SimpleLogger, seed_everything, make_dataloaders, _set_r
 from core.metrics import precompute_distance_maps
 from core.case_classification import case_id_from_patch_stem, load_case_class_csv
 from engine.train_engine import run_training_loop
+from project_config import PROJECT_ROOT, MODEL_V2_BASE
 
-DATA_ROOT = Path(r"E:\data")
+DATA_ROOT = PROJECT_ROOT
 
 TRAIN_DIRS = [
     DATA_ROOT / "patches" / "train",
@@ -46,7 +49,7 @@ EARLY_STOP_PAT  = 25
 BASE_LR         = 5e-4
 MIN_LR          = 1e-6
 WEIGHT_DECAY    = 1e-4
-MODEL_BASE      = 24   # smaller = faster; 32 was ~22.5M params, 24 ~10–12M
+MODEL_BASE      = MODEL_V2_BASE  # single-source default (override via env MODEL_V2_BASE)
 V2_BATCH_SIZE   = 3   # ~5.5 GB peak, no thrashing on 8 GB GPU
 V2_ACCUM_STEPS  = 3   # effective batch = 3 * 3 = 9
 V2_VAL_BATCH    = 4   # safe val VRAM on 8 GB GPU

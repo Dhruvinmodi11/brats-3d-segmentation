@@ -15,11 +15,22 @@ from typing import Callable
 import numpy as np
 import torch
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "training"))
+ROOT_DIR = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT_DIR))
+sys.path.insert(0, str(ROOT_DIR / "training"))
 from core.model import UNet3DAttn, UNet3DAttnV2
+from project_config import (
+    MODEL_IN_CH,
+    MODEL_NUM_CLASSES,
+    MODEL_V1_BASE,
+    MODEL_V2_BASE,
+    V2_MODELS_DIR as PROJECT_V2_MODELS_DIR,
+    MIXED_MODELS_DIR as PROJECT_MIXED_MODELS_DIR,
+    OUTPUTS_DIR as PROJECT_OUTPUTS_DIR,
+)
 
-V1_CONFIG = dict(in_ch=4, num_classes=4, base=24)
-V2_CONFIG = dict(in_ch=4, num_classes=4, base=32)
+V1_CONFIG = dict(in_ch=MODEL_IN_CH, num_classes=MODEL_NUM_CLASSES, base=MODEL_V1_BASE)
+V2_CONFIG = dict(in_ch=MODEL_IN_CH, num_classes=MODEL_NUM_CLASSES, base=MODEL_V2_BASE)
 
 CLASS_NAMES = {0: "Background", 1: "NCR/NET", 2: "Edema", 3: "ET"}
 
@@ -45,9 +56,9 @@ def _forward_v2(model, tensor, device: torch.device):
         return seg, case
     return out.float(), None
 
-V2_MODELS_DIR   = Path(os.environ.get("V2_MODELS_DIR", r"E:\data\models\v2"))
-MIXED_MODELS_DIR = Path(r"E:\data\models\mixed")
-OUTPUTS_DIR     = Path(os.environ.get("OUTPUTS_DIR", r"E:\data\outputs"))
+V2_MODELS_DIR = Path(os.environ.get("V2_MODELS_DIR", str(PROJECT_V2_MODELS_DIR)))
+MIXED_MODELS_DIR = Path(os.environ.get("MIXED_MODELS_DIR", str(PROJECT_MIXED_MODELS_DIR)))
+OUTPUTS_DIR = Path(os.environ.get("OUTPUTS_DIR", str(PROJECT_OUTPUTS_DIR)))
 
 
 def _detect_model_version(model_dir: Path) -> str:

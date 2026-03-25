@@ -13,14 +13,17 @@ from pathlib import Path
 import numpy as np
 
 INFERENCE_DIR = Path(__file__).resolve().parent
+ROOT_DIR = INFERENCE_DIR.parent
+sys.path.insert(0, str(ROOT_DIR))
 sys.path.insert(0, str(INFERENCE_DIR))
 sys.path.insert(0, str(INFERENCE_DIR.parent / "training"))
 
 from metrics import compute_brats_metrics, CLASS_NAMES
 from core.case_classification import case_id_from_patch_stem, load_case_class_csv
+from project_config import PATCHES_DIR, OUTPUTS_DIR as PROJECT_OUTPUTS_DIR
 
-VAL_DIR = Path(r"E:\data\patches\val")
-OUTPUTS_DIR = Path(r"E:\data\outputs")
+VAL_DIR = PATCHES_DIR / "val"
+OUTPUTS_DIR = PROJECT_OUTPUTS_DIR
 
 
 def case_id_from_path(path: Path) -> str:

@@ -1,16 +1,21 @@
 # visualize.py — View prediction mask (and optionally overlay on input patch)
 #
 # Usage:
-#   python inference/visualize.py E:\data\outputs\my_result.npz
-#   python inference/visualize.py E:\data\outputs\my_result.npz --input E:\data\patches\val\BraTS-GLI-00006-000_patch_0000.npz
-#   python inference/visualize.py E:\data\outputs\my_result.npz --save E:\data\outputs\my_viz.png
+#   python inference/visualize.py outputs/my_result.npz
+#   python inference/visualize.py outputs/my_result.npz --input patches/val/BraTS-GLI-00006-000_patch_0000.npz
+#   python inference/visualize.py outputs/my_result.npz --save outputs/my_viz.png
 
 import argparse
+import sys
 from pathlib import Path
 
 import numpy as np
 
-OUTPUTS_DIR = Path(r"E:\data\outputs")
+ROOT_DIR = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT_DIR))
+from project_config import OUTPUTS_DIR as PROJECT_OUTPUTS_DIR
+
+OUTPUTS_DIR = PROJECT_OUTPUTS_DIR
 
 # BraTS class colors (R, G, B) for overlay — match monitor.py
 CLASS_COLORS = {
@@ -41,7 +46,7 @@ def main():
     p = argparse.ArgumentParser(description="Visualize BraTS prediction mask")
     p.add_argument("prediction", help="Path to prediction .npz (contains 'mask')")
     p.add_argument("--input", default=None, help="Path to original patch .npz for background (images + optional label)")
-    p.add_argument("--save", default=None, help="Path to save PNG; default: E:\\data\\outputs\\<pred_stem>_viz.png")
+    p.add_argument("--save", default=None, help="Path to save PNG; default: outputs/<pred_stem>_viz.png")
     args = p.parse_args()
 
     pred_path = Path(args.prediction)

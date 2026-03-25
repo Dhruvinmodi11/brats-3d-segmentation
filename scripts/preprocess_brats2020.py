@@ -38,6 +38,10 @@ import nibabel as nib
 import numpy as np
 from tqdm import tqdm
 
+ROOT_DIR = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT_DIR))
+from project_config import PATCHES_DIR
+
 PATCH_SIZE = 96
 STRIDE = 64
 MIN_TUMOR_RATIO_DEFAULT = 0.005
@@ -235,7 +239,7 @@ def main():
     parser = argparse.ArgumentParser(description="Preprocess BraTS 2020 into 96³ .npz patches (train/val split)")
     parser.add_argument("--raw-dir", type=str, default=None,
                         help="Path to BraTS2020 training data (auto-detected if not set)")
-    parser.add_argument("--output-dir", type=str, default=r"E:\data\patches\brats2020",
+    parser.add_argument("--output-dir", type=str, default=str(PATCHES_DIR / "brats2020"),
                         help="Base output directory (train/ and val/ created inside)")
     parser.add_argument("--patch-size", type=int, default=PATCH_SIZE)
     parser.add_argument("--stride", type=int, default=STRIDE)

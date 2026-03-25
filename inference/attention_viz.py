@@ -15,7 +15,10 @@ from pathlib import Path
 import numpy as np
 import torch
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "training"))
+ROOT_DIR = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT_DIR))
+sys.path.insert(0, str(ROOT_DIR / "training"))
+from project_config import OUTPUTS_DIR as PROJECT_OUTPUTS_DIR
 
 # Store last captured attention per module (for hook)
 _attention_store = {}
@@ -107,7 +110,7 @@ def main():
     model = ensemble.models[args.model_index]
     maps = get_attention_maps(model, x)
     fig = attention_maps_to_figure(maps, slice_idx=args.slice)
-    out_path = Path(args.output) if args.output else Path(r"E:\data\outputs") / "attention_maps.png"
+    out_path = Path(args.output) if args.output else PROJECT_OUTPUTS_DIR / "attention_maps.png"
     out_path.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(out_path, dpi=120, bbox_inches="tight")
     plt.close(fig)

@@ -14,20 +14,31 @@ import numpy as np
 import torch
 
 INFERENCE_DIR = Path(__file__).resolve().parent
+ROOT_DIR = INFERENCE_DIR.parent
+sys.path.insert(0, str(ROOT_DIR))
 sys.path.insert(0, str(INFERENCE_DIR))
 sys.path.insert(0, str(INFERENCE_DIR.parent / "training"))
 
 from core.model import UNet3DAttn, UNet3DAttnV2
+from project_config import (
+    MODEL_IN_CH,
+    MODEL_NUM_CLASSES,
+    MODEL_V1_BASE,
+    MODEL_V2_BASE,
+    OUTPUTS_DIR as PROJECT_OUTPUTS_DIR,
+    MODELS_DIR as PROJECT_MODELS_DIR,
+    V2_MODELS_DIR as PROJECT_V2_MODELS_DIR,
+)
 
-V1_CONFIG = dict(in_ch=4, num_classes=4, base=24)
-V2_CONFIG = dict(in_ch=4, num_classes=4, base=32)
-OUTPUTS_DIR = Path(r"E:\data\outputs")
-MODELS_DIR = Path(r"E:\data\models")
+V1_CONFIG = dict(in_ch=MODEL_IN_CH, num_classes=MODEL_NUM_CLASSES, base=MODEL_V1_BASE)
+V2_CONFIG = dict(in_ch=MODEL_IN_CH, num_classes=MODEL_NUM_CLASSES, base=MODEL_V2_BASE)
+OUTPUTS_DIR = PROJECT_OUTPUTS_DIR
+MODELS_DIR = PROJECT_MODELS_DIR
 
 
 def export_onnx(onnx_path: Path, device: str = "cpu", version: str = "v1") -> None:
     if version == "v2":
-        ckpt_path = Path(r"E:\data\models\v2\fold_1_best.pt")
+        ckpt_path = PROJECT_V2_MODELS_DIR / "fold_1_best.pt"
         ckpt = torch.load(ckpt_path, map_location=device, weights_only=False)
         sd = ckpt["model"]
         has_dsd = any(k.startswith("dsd_") for k in sd)
