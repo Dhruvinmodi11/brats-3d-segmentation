@@ -175,6 +175,21 @@ Per-case sample from the report:
 | BraTS-GLI-00018-000 | 10        | 0.8258       | 0.9722  | 0.8865  | 0.7799  |
 | BraTS-GLI-00032-001 | 12        | 0.8018       | 0.8985  | 0.8947  | 0.8972  |
 
+### Actual segmentation outputs (GT vs Prediction overlays)
+
+Each panel below shows `T1ce`, `Ground truth`, and `Prediction` for a real patch exported from this project.
+
+**Example A - BraTS-GLI-00006-000 patch 0000**
+
+![Segmentation Example A](outputs/seg_example_00006_0000.png)
+
+**Example B - BraTS-GLI-00006-000 patch 0001**
+
+![Segmentation Example B](outputs/seg_example_00006_0001.png)
+
+**Example C - BraTS-GLI-00018-000 patch 0006**
+
+![Segmentation Example C](outputs/seg_example_00018_0006.png)
 
 Output artifacts included in this repo:
 
