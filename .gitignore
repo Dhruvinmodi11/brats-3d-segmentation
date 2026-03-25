@@ -1,0 +1,45 @@
+.venv/
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*.pyd
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.cache/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# Cursor/agent configs (local)
+.cursor/
+.claude/
+
+# Data / generated artifacts
+patches/
+labels/
+logs/
+
+# Models: keep repo lean; only track curated best checkpoint(s)
+models/**
+!models/v2/
+!models/v2/fold_1_best.pt
+
+# Outputs: keep only curated, small, shareable artifacts
+outputs/**
+!outputs/eval_report.html
+!outputs/attention.png
+!outputs/my_result.npz
+
+# Optional: do not track ONNX export artifacts by default
+outputs/*.onnx
+outputs/*.onnx.data
+
+# Secrets
+*.env
+*.env.*

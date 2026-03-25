@@ -1,0 +1,37 @@
+# BraTS 2023 3D Segmentation - Project Dependencies
+# Install: pip install -r requirements.txt
+#
+# Note: For GPU support, install PyTorch from https://pytorch.org first:
+#   pip install torch --index-url https://download.pytorch.org/whl/cu121  # CUDA 12.1
+#   pip install torch --index-url https://download.pytorch.org/whl/cu118  # CUDA 11.8
+#   pip install torch  # CPU only
+
+# Core ML / Deep Learning
+torch>=2.0.0
+
+# Numerical computing
+numpy>=1.20.0
+
+# Visualization
+matplotlib>=3.5.0
+
+# Progress bars & utilities
+tqdm>=4.60.0
+
+# Medical imaging (NIfTI)
+nibabel>=4.0.0
+scipy>=1.9.0
+
+# GPU boundary loss (required when USE_BOUNDARY=True; RTX 4060 = CUDA 12)
+cupy-cuda12x
+
+# Web API
+fastapi>=0.100.0
+uvicorn[standard]>=0.22.0
+python-multipart>=0.0.6
+
+# Export & benchmark
+onnx>=1.14.0
+onnxruntime>=1.15.0
+
+onnxscript>=0.1.0
